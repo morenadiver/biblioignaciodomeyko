@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca Polaca Ignacio Domeyko</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <header>
+    <h1>Biblioteca Polaca Ignacio Domeyko</h1>
+    <nav>
+      <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#catalogo">Catálogo</a></li>
+        <li><a href="#investigacion">Investigación</a></li>
+        <li><a href="#archivo">Archivo Histórico</a></li>
+        <li><a href="#eventos">Eventos</a></li>
+        <li><a href="#nosotros">Sobre Nosotros</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="inicio">
+      <h2>Bienvenidos</h2>
+      <p>La Biblioteca Polaca Ignacio Domeyko es un espacio de encuentro cultural, conocimiento y memoria de la comunidad polaca en Argentina.</p>
+    </section>
+
+    <section id="catalogo">
+      <h2>Catálogo de Libros</h2>
+      <input type="text" id="buscar" placeholder="Buscar por título o autor...">
+      <table>
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Año</th>
+            <th>Temática</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-libros">
+          <!-- Libros cargados desde la hoja de cálculo -->
+        </tbody>
+      </table>
+    </section>
+
+    <section id="investigacion">
+      <h2>Apoyo a la Investigación</h2>
+      <p>La Biblioteca brinda apoyo a quienes investigan sobre sus antepasados polacos, como también a proyectos académicos relacionados con Polonia y su diáspora.</p>
+    </section>
+
+    <section id="archivo">
+      <h2>Archivo Histórico</h2>
+      <p>Contamos con un archivo documental que abarca temas históricos, genealógicos y culturales, accesible a investigadores mediante solicitud.</p>
+    </section>
+
+    <section id="eventos">
+      <h2>Eventos y Actividades</h2>
+      <ul>
+        <li>📅 Taller de genealogía - Agosto 2025</li>
+        <li>📚 Presentación de libros polacos - Septiembre 2025</li>
+      </ul>
+    </section>
+
+    <section id="nosotros">
+      <h2>Sobre Nosotros</h2>
+      <p>La Biblioteca lleva el nombre de Ignacio Domeyko, científico y educador polaco. Nuestra misión es conservar y difundir la cultura y la memoria de la comunidad polaca en Argentina.</p>
+    </section>
+
+    <section id="contacto">
+      <h2>Contacto</h2>
+      <p>Email: contacto@bibliotecapolaca.org</p>
+      <p>Dirección: Buenos Aires, Argentina</p>
+      <p>Teléfono: +54 11 1234 5678</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Biblioteca Polaca Ignacio Domeyko</p>
+  </footer>
+
+  <script>
+    const hojaID = "TU_ID_DE_HOJA"; // Reemplazar con ID real
+    const url = `https://opensheet.elk.sh/${hojaID}/Hoja1`;
+
+    async function cargarLibros() {
+      const respuesta = await fetch(url);
+      const libros = await respuesta.json();
+      const tabla = document.getElementById("tabla-libros");
+      const buscar = document.getElementById("buscar");
+
+      function renderTabla(filtrados) {
+        tabla.innerHTML = "";
+        filtrados.forEach(libro => {
+          const fila = document.createElement("tr");
+          fila.innerHTML = `
+            <td>${libro.Titulo}</td>
+            <td>${libro.Autor}</td>
+            <td>${libro.Anio}</td>
+            <td>${libro.Tematica}</td>
+          `;
+          tabla.appendChild(fila);
+        });
+      }
+
+      renderTabla(libros);
+
+      buscar.addEventListener("input", () => {
+        const texto = buscar.value.toLowerCase();
+        const filtrados = libros.filter(libro =>
+          libro.Titulo.toLowerCase().includes(texto) ||
+          libro.Autor.toLowerCase().includes(texto)
+        );
+        renderTabla(filtrados);
+      });
+    }
+
+    cargarLibros();
+  </script>
+</body>
+</html>
